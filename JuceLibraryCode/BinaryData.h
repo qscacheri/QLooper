@@ -8,11 +8,17 @@
 
 namespace BinaryData
 {
+    extern const char*   knob_base_png;
+    const int            knob_base_pngSize = 271077;
+
+    extern const char*   tick_png;
+    const int            tick_pngSize = 29595;
+
     extern const char*   click_wav;
     const int            click_wavSize = 46506;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 1;
+    const int namedResourceListSize = 3;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];

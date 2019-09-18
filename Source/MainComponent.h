@@ -12,6 +12,7 @@
 #include "Playhead.h"
 #include "Looper.h"
 #include "Metronome.h"
+#include "TwoPartSVGKnob.h"
 
 //==============================================================================
 /*
@@ -36,6 +37,8 @@ public:
 
 private:
     AudioDeviceSelectorComponent deviceSelector;
+    std::unique_ptr<TwoPartSVGKnob> knob;
+    
     std::unique_ptr<TextButton> recordButton;
     Playhead playhead;
     Looper looper;

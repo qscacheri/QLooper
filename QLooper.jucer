@@ -3,7 +3,13 @@
 <JUCERPROJECT id="C12R7e" name="QLooper" projectType="guiapp" jucerVersion="5.4.4"
               companyName="Quin Scacheri" bundleIdentifier="com.scacheri.qlooper">
   <MAINGROUP id="lE4X5v" name="QLooper">
+    <FILE id="x3qBlg" name="knob_base.png" compile="0" resource="1" file="knob_base.png"/>
+    <FILE id="l0zsK2" name="tick.png" compile="0" resource="1" file="tick.png"/>
     <GROUP id="{F175EB77-DF78-83AB-7BE1-8FC0DC47B002}" name="Source">
+      <FILE id="LlwHUc" name="TwoPartSVGKnob.cpp" compile="1" resource="0"
+            file="Source/TwoPartSVGKnob.cpp"/>
+      <FILE id="RX9nbl" name="TwoPartSVGKnob.h" compile="0" resource="0"
+            file="Source/TwoPartSVGKnob.h"/>
       <FILE id="RXgK9h" name="Metronome.h" compile="0" resource="0" file="Source/Metronome.h"/>
       <FILE id="Kv12ba" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
       <FILE id="nNHF5U" name="MainComponent.cpp" compile="1" resource="0"

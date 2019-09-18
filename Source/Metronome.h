@@ -30,7 +30,6 @@ public:
             
         }
         
-//        readerSource->setLooping(true);
         inputStream.release();
     }
     
@@ -39,30 +38,21 @@ public:
         
         transportSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
         readerSource->prepareToPlay(samplesPerBlockExpected, sampleRate);
-        readerSource->setLooping(true);
+        readerSource->setLooping(false);
     }
-
+    
     void getNextBlock(const AudioSourceChannelInfo& bufferToFill)
     {
         readerSource->getNextAudioBlock(bufferToFill);
-//        for (int i = 0; i < 16; i++)
-//        {
-//            if (playhead->getPositionInSamples() + bufferToFill.buffer->getNumSamples() > playhead->beatsToSamples(i * 4) && playhead->getPositionInSamples() <= playhead->beatsToSamples(i * 4))
-//                shouldPlay = true;
-//        }
-//
-//
-//        if (readerSource->getNextReadPosition() > readerSource->getTotalLength())
-//        {
-//            shouldPlay = false;
-//            readerSource->setNextReadPosition(0);
-//        }
-//
-//        if (shouldPlay)
-//        {
-//            readerSource->getNextAudioBlock(bufferToFill);
-//        }
 
+        for (int i = 0; i < 16; i++){
+            if (playhead->getPositionInSamples() + bufferToFill.buffer->getNumSamples() > playhead->beatsToSamples(i * 4) && playhead->getPositionInSamples() <= playhead->beatsToSamples(i * 4))
+                readerSource->setNextReadPosition(0);
+
+        }
+
+        
+        
     }
     
     Playhead* playhead;

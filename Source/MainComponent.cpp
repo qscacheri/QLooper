@@ -1,10 +1,10 @@
 /*
-  ==============================================================================
-
-    This file was auto-generated!
-
-  ==============================================================================
-*/
+ ==============================================================================
+ 
+ This file was auto-generated!
+ 
+ ==============================================================================
+ */
 
 #include "MainComponent.h"
 
@@ -17,6 +17,13 @@ MainComponent::MainComponent() : deviceSelector(deviceManager, 1, 1, 1, 1, true,
     
     metronome.playhead = &playhead;
     
+    Image knobImage(ImageCache::getFromMemory(BinaryData::knob_base_png, BinaryData::knob_base_pngSize));
+    Image tickImage(ImageCache::getFromMemory(BinaryData::tick_png, BinaryData::tick_pngSize));
+
+    
+    knob.reset(new TwoPartSVGKnob(knobImage, tickImage));
+    addAndMakeVisible(knob.get());
+    
     recordButton.reset(new TextButton());
     recordButton->setButtonText("Record");
     recordButton->onClick = [this] {
@@ -28,7 +35,7 @@ MainComponent::MainComponent() : deviceSelector(deviceManager, 1, 1, 1, 1, true,
     addAndMakeVisible(recordButton.get());
     
     setSize (800, 600);
-
+    
     // Some platforms require permissions to open input channels so request that here
     if (RuntimePermissions::isRequired (RuntimePermissions::recordAudio)
         && ! RuntimePermissions::isGranted (RuntimePermissions::recordAudio))
@@ -52,14 +59,14 @@ MainComponent::MainComponent() : deviceSelector(deviceManager, 1, 1, 1, 1, true,
 
 MainComponent::~MainComponent()
 {
- 
+    
     File file("~/Library/Application Support/QLooper/io.xml");
     DBG(file.getFileName());
     std::unique_ptr<XmlElement> io = deviceManager.createStateXml();
     DBG(io->toString());
     io->writeTo(file);
-
-//    io.release();
+    
+    //    io.release();
     // This shuts down the audio device and clears the audio source.
     shutdownAudio();
     
@@ -71,7 +78,7 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     
     metronome.prepareToPlay(samplesPerBlockExpected, sampleRate);
     
-//    looper.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    //    looper.prepareToPlay(samplesPerBlockExpected, sampleRate);
     
     tone.prepareToPlay(samplesPerBlockExpected, sampleRate);
     tone.setAmplitude(.5);
@@ -83,11 +90,19 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 
 void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
 {
+    
+    AudioBuffer<float> bufferCopy(1, bufferToFill.buffer->getNumSamples());
+
+    AudioSourceChannelInfo copy(&bufferCopy, 0, bufferCopy.getNumSamples());
+
+    metronome.getNextBlock(copy);
+
     // update playhead position
     playhead.updatePosition(bufferToFill.buffer->getNumSamples());
-    
+
     looper.getNextAudioBlock(*bufferToFill.buffer);
 
+    bufferToFill.buffer->addFrom(0, 0, *copy.buffer, 0, 0, bufferToFill.buffer->getNumSamples());
     
 }
 
@@ -101,13 +116,13 @@ void MainComponent::paint (Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
-
+    
     // You can add your drawing code here!
 }
 
 void MainComponent::resized()
 {
-    recordButton->setBounds(getLocalBounds().removeFromLeft(getWidth() / 2));
+    recordButton->setBounds(10, 10, 400, 400);
     deviceSelector.setBounds(getLocalBounds().removeFromRight(getWidth() / 2));
-
+    
 }
