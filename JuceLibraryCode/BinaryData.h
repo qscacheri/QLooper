@@ -8,6 +8,12 @@
 
 namespace BinaryData
 {
+    extern const char*   button_down_png;
+    const int            button_down_pngSize = 136914;
+
+    extern const char*   button_up_png;
+    const int            button_up_pngSize = 121794;
+
     extern const char*   knob_base_png;
     const int            knob_base_pngSize = 271077;
 
@@ -18,7 +24,7 @@ namespace BinaryData
     const int            click_wavSize = 46506;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 3;
+    const int namedResourceListSize = 5;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];

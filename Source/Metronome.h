@@ -44,15 +44,12 @@ public:
     void getNextBlock(const AudioSourceChannelInfo& bufferToFill)
     {
         readerSource->getNextAudioBlock(bufferToFill);
-
-        for (int i = 0; i < 16; i++){
+        
+        for (int i = 0; i < 16; i++)
+        {
             if (playhead->getPositionInSamples() + bufferToFill.buffer->getNumSamples() > playhead->beatsToSamples(i * 4) && playhead->getPositionInSamples() <= playhead->beatsToSamples(i * 4))
                 readerSource->setNextReadPosition(0);
-
         }
-
-        
-        
     }
     
     Playhead* playhead;

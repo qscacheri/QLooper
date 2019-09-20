@@ -10,9 +10,9 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MainComponent.h"
-
+#include "QLooperMenuBar.h"
 //==============================================================================
-class LooperApplication  : public JUCEApplication
+class LooperApplication  : public JUCEApplication, public MenuBarModel::Listener
 {
 public:
     //==============================================================================
@@ -28,6 +28,11 @@ public:
         // This method is where you should put your application's initialisation code..
 
         mainWindow.reset (new MainWindow (getApplicationName()));
+        
+        menuBarComponent.reset(new MenuBarComponent(model.get()));
+                
+//        commandManager.registerCommand(ApplicationCommandInfo(50));
+//        commandManager.registerAllCommandsForTarget(audioWindow.get());
     }
 
     void shutdown() override
@@ -57,10 +62,27 @@ public:
         This class implements the desktop window that contains an instance of
         our MainComponent class.
     */
-    class MainWindow    : public DocumentWindow
+    
+    virtual void menuBarItemsChanged (MenuBarModel *menuBarModel) override
+    {
+        
+    }
+    
+    
+    virtual void menuCommandInvoked (MenuBarModel *menuBarModel, const ApplicationCommandTarget::InvocationInfo &info) override
+    {
+        
+    }
+    
+    virtual void menuBarActivated (MenuBarModel *menuBarModel, bool isActive) override
+    {
+        
+    }
+    
+    class MainWindow : public DocumentWindow
     {
     public:
-        MainWindow (String name)  : DocumentWindow (name,
+        MainWindow (String name) : DocumentWindow (name,
                                                     Desktop::getInstance().getDefaultLookAndFeel()
                                                                           .findColour (ResizableWindow::backgroundColourId),
                                                     DocumentWindow::allButtons)
@@ -93,12 +115,18 @@ public:
            subclass also calls the superclass's method.
         */
 
+        
     private:
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainWindow)
     };
+    
+    ApplicationCommandManager commandManager;
 
 private:
     std::unique_ptr<MainWindow> mainWindow;
+
+    std::unique_ptr<MenuBarComponent> menuBarComponent;
+    std::unique_ptr<QLooperMenuBarModel> model;
 };
 
 //==============================================================================

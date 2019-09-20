@@ -1,31 +1,28 @@
-/*
- ==============================================================================
- 
- This file was auto-generated!
- 
- ==============================================================================
- */
-
 #include "MainComponent.h"
 
 //==============================================================================
-MainComponent::MainComponent() : deviceSelector(deviceManager, 1, 1, 1, 1, true, true, false, false)
+MainComponent::MainComponent()
 {
+    audioWindow.reset(new AudioWindow("Audio Preferences", deviceManager));
     
-    
-    addAndMakeVisible(deviceSelector);
+    model.reset(new QLooperMenuBarModel(this));
+    MenuBarModel::setMacMainMenu(model.get());
+    model->addListener(this);
     
     metronome.playhead = &playhead;
     
     Image knobImage(ImageCache::getFromMemory(BinaryData::knob_base_png, BinaryData::knob_base_pngSize));
     Image tickImage(ImageCache::getFromMemory(BinaryData::tick_png, BinaryData::tick_pngSize));
-
     
     knob.reset(new TwoPartSVGKnob(knobImage, tickImage));
     addAndMakeVisible(knob.get());
     
-    recordButton.reset(new TextButton());
-    recordButton->setButtonText("Record");
+    Image buttonUp = ImageCache::getFromMemory(BinaryData::button_up_png, BinaryData::button_up_pngSize);
+    
+    Image buttonDown = ImageCache::getFromMemory(BinaryData::button_down_png, BinaryData::button_down_pngSize);
+
+    recordButton.reset(new ImageButton());
+    recordButton->setImages(false, true, true, buttonUp, 1.f, Colours::transparentBlack, buttonUp, 1.f, Colours::transparentBlack, buttonDown, 1.f, Colours::transparentBlack);
     recordButton->onClick = [this] {
         if (looper.isRecording)
             looper.stopRecording();
@@ -33,6 +30,9 @@ MainComponent::MainComponent() : deviceSelector(deviceManager, 1, 1, 1, 1, true,
             looper.startRecording();
     };
     addAndMakeVisible(recordButton.get());
+    
+    ioButton.reset(new TextButton());
+    ioButton->setButtonText("i/o");
     
     setSize (800, 600);
     
@@ -63,10 +63,9 @@ MainComponent::~MainComponent()
     File file("~/Library/Application Support/QLooper/io.xml");
     DBG(file.getFileName());
     std::unique_ptr<XmlElement> io = deviceManager.createStateXml();
-    DBG(io->toString());
-    io->writeTo(file);
+    if (io.get() != nullptr)
+        io->writeTo(file);
     
-    //    io.release();
     // This shuts down the audio device and clears the audio source.
     shutdownAudio();
     
@@ -78,7 +77,7 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     
     metronome.prepareToPlay(samplesPerBlockExpected, sampleRate);
     
-    //    looper.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    looper.prepareToPlay(samplesPerBlockExpected, sampleRate);
     
     tone.prepareToPlay(samplesPerBlockExpected, sampleRate);
     tone.setAmplitude(.5);
@@ -123,6 +122,20 @@ void MainComponent::paint (Graphics& g)
 void MainComponent::resized()
 {
     recordButton->setBounds(10, 10, 400, 400);
-    deviceSelector.setBounds(getLocalBounds().removeFromRight(getWidth() / 2));
+}
+
+//menu bar listener methods
+void MainComponent::menuBarItemsChanged (MenuBarModel *menuBarModel)
+{
+    
+}
+
+void MainComponent::menuCommandInvoked (MenuBarModel *menuBarModel, const ApplicationCommandTarget::InvocationInfo &info)
+{
+    
+}
+
+void MainComponent::menuBarActivated (MenuBarModel *menuBarModel, bool isActive)
+{
     
 }
