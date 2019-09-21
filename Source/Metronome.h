@@ -45,14 +45,19 @@ public:
     
     void getNextBlock(const AudioSourceChannelInfo& bufferToFill)
     {
-        readerSource->getNextAudioBlock(bufferToFill);
-        
+        int numSamples = bufferToFill.numSamples;
+
         
         for (int i = 0; i < 16; i++)
         {
             if (playhead->getPositionInSamples() + bufferToFill.buffer->getNumSamples() > playhead->beatsToSamples(i * 4) && playhead->getPositionInSamples() <= playhead->beatsToSamples(i * 4))
                 readerSource->setNextReadPosition(0);
         }
+        
+        AudioBuffer<float> bufferCopy(1, numSamples);
+        readerSource->getNextAudioBlock(AudioSourceChannelInfo(bufferCopy));
+        bufferToFill.buffer->addFrom(0, 0, bufferCopy, 0, 0, numSamples);
+
     }
     
     void setEnabled(bool enabled) {isEnabled = enabled;}

@@ -59,10 +59,7 @@ void Looper::getNextAudioBlock(AudioBuffer<float> &buffer)
         buffer.addFrom(0, 0, loops[0]->audioData, 0, playhead.getPositionInSamples(), numSamples);
     
     if (getMetronomeEnabled()) {
-        AudioBuffer<float> bufferCopy(1, numSamples);
-        AudioSourceChannelInfo copy(&bufferCopy, 0, numSamples);
-        metronome.getNextBlock(copy);
-        buffer.addFrom(0, 0, *copy.buffer, 0, 0, numSamples);
+        metronome.getNextBlock(AudioSourceChannelInfo(buffer));
     }
 
 
