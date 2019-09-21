@@ -46,17 +46,30 @@ public:
     void getNextBlock(const AudioSourceChannelInfo& bufferToFill)
     {
         int numSamples = bufferToFill.numSamples;
-
+        bool startedPlayback = false;
         
         for (int i = 0; i < 16; i++)
         {
             if (playhead->getPositionInSamples() + bufferToFill.buffer->getNumSamples() > playhead->beatsToSamples(i * 4) && playhead->getPositionInSamples() <= playhead->beatsToSamples(i * 4))
+            {
                 readerSource->setNextReadPosition(0);
+                int position = (playhead->getPositionInSamples() + numSamples) - playhead->beatsToSamples(i * 4);
+                AudioBuffer<float> bufferCopy(1, numSamples - position);
+                readerSource->getNextAudioBlock(AudioSourceChannelInfo(bufferCopy));
+                bufferToFill.buffer->addFrom(0, 0, bufferCopy, 0, 0, numSamples - position);
+                startedPlayback = true;
+                break;
+
+            }
+                
         }
         
-        AudioBuffer<float> bufferCopy(1, numSamples);
-        readerSource->getNextAudioBlock(AudioSourceChannelInfo(bufferCopy));
-        bufferToFill.buffer->addFrom(0, 0, bufferCopy, 0, 0, numSamples);
+        if (!startedPlayback)
+        {
+            AudioBuffer<float> bufferCopy(1, numSamples);
+            readerSource->getNextAudioBlock(AudioSourceChannelInfo(bufferCopy));
+            bufferToFill.buffer->addFrom(0, 0, bufferCopy, 0, 0, numSamples);
+        }
 
     }
     
