@@ -3,14 +3,11 @@
 <JUCERPROJECT id="C12R7e" name="QLooper" projectType="guiapp" jucerVersion="5.4.4"
               companyName="Quin Scacheri" bundleIdentifier="com.scacheri.qlooper">
   <MAINGROUP id="lE4X5v" name="QLooper">
-    <FILE id="Kc7NsL" name="button_down.png" compile="0" resource="1" file="button_down.png"/>
-    <FILE id="GWxOpW" name="button_up.png" compile="0" resource="1" file="button_up.png"/>
-    <FILE id="x3qBlg" name="knob_base.png" compile="0" resource="1" file="knob_base.png"/>
-    <FILE id="l0zsK2" name="tick.png" compile="0" resource="1" file="tick.png"/>
-    <FILE id="rZatCt" name="background.png" compile="0" resource="1" file="background.png"/>
     <GROUP id="{F175EB77-DF78-83AB-7BE1-8FC0DC47B002}" name="Source">
       <FILE id="DR5OTD" name="QLooperLookAndFeel.h" compile="0" resource="0"
             file="Source/QLooperLookAndFeel.h"/>
+      <FILE id="IJLKp8" name="ImageToggleButton.h" compile="0" resource="0"
+            file="Source/ImageToggleButton.h"/>
       <FILE id="hYiXqr" name="AudioPreferencesComponent.cpp" compile="1"
             resource="0" file="Source/AudioPreferencesComponent.cpp"/>
       <FILE id="nJPGvb" name="AudioPreferencesComponent.h" compile="0" resource="0"
@@ -35,8 +32,23 @@
       <FILE id="TYsmYA" name="Playhead.cpp" compile="1" resource="0" file="Source/Playhead.cpp"/>
       <FILE id="gcGnA3" name="Playhead.h" compile="0" resource="0" file="Source/Playhead.h"/>
     </GROUP>
-    <GROUP id="{AD4C0411-0D63-B050-7658-F63E5DB741F1}" name="samples">
-      <FILE id="Dpwkr4" name="click.wav" compile="0" resource="1" file="samples/click.wav"/>
+    <GROUP id="{AA62E192-80AF-14DC-CC2D-33676201AA6E}" name="assets">
+      <GROUP id="{44C5EACE-7F23-298A-5697-2C6B3859C459}" name="graphics">
+        <FILE id="RfVmIy" name="background.png" compile="0" resource="1" file="assets/graphics/background.png"/>
+        <FILE id="FdmO8y" name="button_off_down.png" compile="0" resource="1"
+              file="assets/graphics/button_off_down.png"/>
+        <FILE id="dAOhyb" name="button_off_up.png" compile="0" resource="1"
+              file="assets/graphics/button_off_up.png"/>
+        <FILE id="Fmnian" name="button_on_down.png" compile="0" resource="1"
+              file="assets/graphics/button_on_down.png"/>
+        <FILE id="giIJq2" name="button_on_up.png" compile="0" resource="1"
+              file="assets/graphics/button_on_up.png"/>
+        <FILE id="KWf8cG" name="knob_base.png" compile="0" resource="1" file="assets/graphics/knob_base.png"/>
+        <FILE id="z6tjWO" name="tick.png" compile="0" resource="1" file="assets/graphics/tick.png"/>
+      </GROUP>
+      <GROUP id="{BD0F7AEC-FF28-CD31-D397-90C6109C891A}" name="samples">
+        <FILE id="gjD3kG" name="click.wav" compile="0" resource="1" file="assets/samples/click.wav"/>
+      </GROUP>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>

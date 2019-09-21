@@ -56,7 +56,10 @@ public:
                 int position = (playhead->getPositionInSamples() + numSamples) - playhead->beatsToSamples(i * 4);
                 AudioBuffer<float> bufferCopy(1, numSamples - position);
                 readerSource->getNextAudioBlock(AudioSourceChannelInfo(bufferCopy));
-                bufferToFill.buffer->addFrom(0, 0, bufferCopy, 0, 0, numSamples - position);
+                bufferCopy.applyGain(0, 0, numSamples - position, gain);
+                bufferToFill.buffer->addFrom(0, position, bufferCopy, 0, 0, numSamples - position);
+                bufferToFill.buffer->addFrom(1, position, bufferCopy, 0, 0, numSamples - position);
+                
                 startedPlayback = true;
                 break;
 
@@ -68,7 +71,10 @@ public:
         {
             AudioBuffer<float> bufferCopy(1, numSamples);
             readerSource->getNextAudioBlock(AudioSourceChannelInfo(bufferCopy));
+            bufferCopy.applyGain(0, 0, numSamples, gain);
             bufferToFill.buffer->addFrom(0, 0, bufferCopy, 0, 0, numSamples);
+            bufferToFill.buffer->addFrom(1, 0, bufferCopy, 0, 0, numSamples);
+
         }
 
     }
@@ -76,9 +82,25 @@ public:
     void setEnabled(bool enabled) {isEnabled = enabled;}
     bool getEnabled() {return isEnabled;}
     
+    void setGain(float newGain)
+    {
+        if (gain < 0 || gain > 1)
+            gain = .5;
+        
+        else
+            gain = newGain;
+        
+    }
+    
+    float getGain()
+    {
+        return gain;
+    }
+    
     Playhead* playhead;
     
 private:
+    float gain = .1;
     bool shouldPlay = false;
     std::unique_ptr<AudioFormatReaderSource> readerSource;
     AudioFormatManager formatManager;

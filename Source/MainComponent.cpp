@@ -17,9 +17,10 @@ MainComponent::MainComponent()
     knob.reset(new TwoPartSVGKnob(knobImage, tickImage));
     addAndMakeVisible(knob.get());
     
-    Image buttonUp = ImageCache::getFromMemory(BinaryData::button_up_png, BinaryData::button_up_pngSize);
-    
-    Image buttonDown = ImageCache::getFromMemory(BinaryData::button_down_png, BinaryData::button_down_pngSize);
+    Image buttonOnUp = ImageCache::getFromMemory(BinaryData::button_on_up_png, BinaryData::button_on_up_pngSize);
+    Image buttonOnDown = ImageCache::getFromMemory(BinaryData::button_on_down_png, BinaryData::button_on_down_pngSize);
+    Image buttonOffUp = ImageCache::getFromMemory(BinaryData::button_off_up_png, BinaryData::button_off_up_pngSize);
+    Image buttonOffDown = ImageCache::getFromMemory(BinaryData::button_off_down_png, BinaryData::button_off_down_pngSize);
     
     inputMonitoringButton.reset(new TextButton());
     inputMonitoringButton->setButtonText("Input Monitoring");
@@ -31,8 +32,8 @@ MainComponent::MainComponent()
     addAndMakeVisible(metroButton.get());
     metroButton->onClick = [this] {looper.setMetronomeEnabled(!looper.getMetronomeEnabled());};
     
-    recordButton.reset(new ImageButton());
-    recordButton->setImages(false, true, true, buttonUp, 1.f, Colours::transparentBlack, buttonUp, 1.f, Colours::transparentBlack, buttonDown, 1.f, Colours::transparentBlack);
+    recordButton.reset(new ImageToggleButton());
+    recordButton->setImages(buttonOffUp, buttonOffDown, buttonOnUp, buttonOnDown);
     recordButton->onClick = [this] {
         if (looper.isRecording)
             looper.stopRecording();
@@ -42,7 +43,7 @@ MainComponent::MainComponent()
     addAndMakeVisible(recordButton.get());
     
     clearButton.reset(new ImageButton());
-    clearButton->setImages(false, true, true, buttonUp, 1.f, Colours::transparentBlack, buttonUp, 1.f, Colours::transparentBlack, buttonDown, 1.f, Colours::transparentBlack);
+    clearButton->setImages(false, true, true, buttonOffUp, 1.f, Colours::transparentBlack, buttonOffUp, 1.f, Colours::transparentBlack, buttonOffDown, 1.f, Colours::transparentBlack);
     clearButton->onClick = [this] { looper.clearLoop(); };
     addAndMakeVisible(clearButton.get());
     
@@ -75,7 +76,7 @@ MainComponent::MainComponent()
     if (f.exists())
     {
         std::unique_ptr<XmlElement> io = XmlDocument::parse(f);
-        deviceManager.initialise(1, 1, io.get(), true);
+        deviceManager.initialise(1, 2, io.get(), true);
     }
 }
 

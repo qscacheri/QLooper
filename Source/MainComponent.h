@@ -15,6 +15,7 @@
 #include "TwoPartSVGKnob.h"
 #include "QLooperMenuBar.h"
 #include "AudioPreferencesComponent.h"
+#include "ImageToggleButton.h"
 
 //==============================================================================
 /*
@@ -96,7 +97,7 @@ private:
     
     std::unique_ptr<TwoPartSVGKnob> knob;
     std::unique_ptr<ImageButton> playButton;
-    std::unique_ptr<ImageButton> recordButton;
+    std::unique_ptr<ImageToggleButton> recordButton;
     std::unique_ptr<ImageButton> clearButton;
 
     std::unique_ptr<TextButton> inputMonitoringButton;

@@ -53,10 +53,18 @@ void Looper::getNextAudioBlock(AudioBuffer<float> &buffer)
         int diff = playhead.getLength() - playhead.getPositionInSamples();
         buffer.addFrom(0, 0, loops[0]->audioData, 0, playhead.getPositionInSamples(), diff);
         buffer.addFrom(0, diff, loops[0]->audioData, 0, 0, numSamples - diff);
+        
+        buffer.addFrom(1, 0, loops[0]->audioData, 0, playhead.getPositionInSamples(), diff);
+        buffer.addFrom(1, diff, loops[0]->audioData, 0, 0, numSamples - diff);
+
     }
     
     else
+    {
         buffer.addFrom(0, 0, loops[0]->audioData, 0, playhead.getPositionInSamples(), numSamples);
+        buffer.addFrom(1, 0, loops[0]->audioData, 0, playhead.getPositionInSamples(), numSamples);
+
+    }
     
     if (getMetronomeEnabled()) {
         metronome.getNextBlock(AudioSourceChannelInfo(buffer));
@@ -111,6 +119,7 @@ bool Looper::getMetronomeEnabled()
 void Looper::setTempo(int bpm)
 {
     playhead.setTempo(bpm);
+    loops[0]->audioData.setSize(1, playhead.getLength());
 }
 
 int Looper::getTempo()
@@ -120,5 +129,8 @@ int Looper::getTempo()
 
 void Looper::clearLoop()
 {
+    if (isRecording)
+        stopRecording();
     
+    loops[0]->audioData.clear();
 }
