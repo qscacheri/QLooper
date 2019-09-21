@@ -15,7 +15,7 @@ AudioPreferencesComponent::AudioPreferencesComponent(AudioDeviceManager& manager
 {
     laf.reset(new QLooperLookAndFeel());
     
-    deviceSelector.setLookAndFeel(laf.get());
+//    deviceSelector.setLookAndFeel(laf.get());
     addAndMakeVisible(deviceSelector);
     
     setSize(500, 500);

@@ -6,10 +6,10 @@ MainComponent::MainComponent()
     audioWindow.reset(new AudioWindow("Audio Preferences", deviceManager));
     
     model.reset(new QLooperMenuBarModel(this));
-    MenuBarModel::setMacMainMenu(model.get());
+    PopupMenu appleMenu;
+    appleMenu.addItem(QLooperMenuBarModel::ids::AudioPreferencesId, "Audio Setup");
+    MenuBarModel::setMacMainMenu(model.get(), &appleMenu);
     model->addListener(this);
-    
-    metronome.playhead = &playhead;
     
     Image knobImage(ImageCache::getFromMemory(BinaryData::knob_base_png, BinaryData::knob_base_pngSize));
     Image tickImage(ImageCache::getFromMemory(BinaryData::tick_png, BinaryData::tick_pngSize));
@@ -20,7 +20,17 @@ MainComponent::MainComponent()
     Image buttonUp = ImageCache::getFromMemory(BinaryData::button_up_png, BinaryData::button_up_pngSize);
     
     Image buttonDown = ImageCache::getFromMemory(BinaryData::button_down_png, BinaryData::button_down_pngSize);
-
+    
+    inputMonitoringButton.reset(new TextButton());
+    inputMonitoringButton->setButtonText("Input Monitoring");
+    addAndMakeVisible(inputMonitoringButton.get());
+    inputMonitoringButton->onClick = [this] {looper.setInputMonitoring(!looper.getInputMonitoring()); };
+    
+    metroButton.reset(new TextButton());
+    metroButton->setButtonText("Metronome on/off");
+    addAndMakeVisible(metroButton.get());
+    metroButton->onClick = [this] {looper.setMetronomeEnabled(!looper.getMetronomeEnabled());};
+    
     recordButton.reset(new ImageButton());
     recordButton->setImages(false, true, true, buttonUp, 1.f, Colours::transparentBlack, buttonUp, 1.f, Colours::transparentBlack, buttonDown, 1.f, Colours::transparentBlack);
     recordButton->onClick = [this] {
@@ -31,8 +41,20 @@ MainComponent::MainComponent()
     };
     addAndMakeVisible(recordButton.get());
     
-    ioButton.reset(new TextButton());
-    ioButton->setButtonText("i/o");
+    clearButton.reset(new ImageButton());
+    clearButton->setImages(false, true, true, buttonUp, 1.f, Colours::transparentBlack, buttonUp, 1.f, Colours::transparentBlack, buttonDown, 1.f, Colours::transparentBlack);
+    clearButton->onClick = [this] { looper.clearLoop(); };
+    addAndMakeVisible(clearButton.get());
+    
+    
+    tempoSlider.reset(new Slider());
+    tempoSlider->setRange(40, 240, 1);
+    tempoSlider->setSliderStyle(Slider::SliderStyle::Rotary);
+    tempoSlider->setValue(looper.getTempo());
+    tempoSlider->addListener(this);
+    addAndMakeVisible(tempoSlider.get());
+    
+    backgroundImage = ImageCache::getFromMemory(BinaryData::background_png, BinaryData::background_pngSize);
     
     setSize (800, 600);
     
@@ -75,33 +97,18 @@ MainComponent::~MainComponent()
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
     
-    metronome.prepareToPlay(samplesPerBlockExpected, sampleRate);
-    
     looper.prepareToPlay(samplesPerBlockExpected, sampleRate);
     
     tone.prepareToPlay(samplesPerBlockExpected, sampleRate);
     tone.setAmplitude(.5);
     tone.setFrequency(440);
-    
-    playhead = Playhead(sampleRate);
-    looper.playhead = &playhead;
 }
 
 void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
 {
     
-    AudioBuffer<float> bufferCopy(1, bufferToFill.buffer->getNumSamples());
-
-    AudioSourceChannelInfo copy(&bufferCopy, 0, bufferCopy.getNumSamples());
-
-    metronome.getNextBlock(copy);
-
-    // update playhead position
-    playhead.updatePosition(bufferToFill.buffer->getNumSamples());
-
     looper.getNextAudioBlock(*bufferToFill.buffer);
 
-    bufferToFill.buffer->addFrom(0, 0, *copy.buffer, 0, 0, bufferToFill.buffer->getNumSamples());
     
 }
 
@@ -113,15 +120,31 @@ void MainComponent::releaseResources()
 //==============================================================================
 void MainComponent::paint (Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
-    
-    // You can add your drawing code here!
+    g.drawImageWithin(backgroundImage, JUCE_LIVE_CONSTANT(0),
+                      JUCE_LIVE_CONSTANT(0), getWidth(), getHeight(), RectanglePlacement::yTop);
 }
 
 void MainComponent::resized()
 {
-    recordButton->setBounds(10, 10, 400, 400);
+    Rectangle<int> area = getLocalBounds();
+    area.removeFromRight(getWidth() / 2);
+    area.removeFromBottom(getHeight() / 2);
+    recordButton->setBounds(area);
+    
+    area.translate(0, getHeight() / 2);
+    area = area.withSizeKeepingCentre(getHeight() / 8, getHeight() / 8);
+    clearButton->setBounds(area);
+    
+    area = getLocalBounds().removeFromRight(getWidth() / 2);
+    area = area.removeFromTop(getHeight() / 3);
+    inputMonitoringButton->setBounds(area);
+    
+    area.translate(0, getHeight() / 3);
+    metroButton->setBounds(area);
+    
+    area.translate(0, getHeight() / 3);
+    tempoSlider->setBounds(area);
+    
 }
 
 //menu bar listener methods
@@ -138,4 +161,12 @@ void MainComponent::menuCommandInvoked (MenuBarModel *menuBarModel, const Applic
 void MainComponent::menuBarActivated (MenuBarModel *menuBarModel, bool isActive)
 {
     
+}
+
+void MainComponent::sliderValueChanged(Slider *slider)
+{
+    if (slider == tempoSlider.get())
+    {
+        looper.setTempo(slider->getValue());
+    }
 }

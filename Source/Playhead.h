@@ -28,6 +28,9 @@ public:
     
     int beatsToSamples(int sixteenthNotes);
     
+    void setTempo(int bpm);
+    int getTempo();
+    
 private:
     bool isPlaying = false;
     int posInSamples = 0;

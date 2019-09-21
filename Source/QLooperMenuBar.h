@@ -16,6 +16,12 @@ class MainComponent;
 class QLooperMenuBarModel : public MenuBarModel
 {
 public:
+    
+    enum ids : int
+    {
+        AudioPreferencesId = 1
+    };
+    
     QLooperMenuBarModel (MainComponent* mainComponent);
     
     virtual StringArray getMenuBarNames() override;

@@ -50,3 +50,12 @@ int Playhead::beatsToSamples(int sixteenthNotes)
     int samples = ((int)((60.0 / bpm*lastSampleRate) / 4 * sixteenthNotes));
     return samples;
 }
+
+void Playhead::setTempo(int newTempo)
+{
+    bpm = newTempo;
+}
+int Playhead::getTempo()
+{
+    return bpm;
+}

@@ -16,8 +16,10 @@
 class Metronome
 {
 public:
-    Metronome()
+    Metronome(Playhead* ph)
     {
+        playhead = ph;
+        
         formatManager.registerBasicFormats();
         std::unique_ptr<MemoryInputStream> inputStream(new MemoryInputStream(BinaryData::click_wav, BinaryData::click_wavSize, false));
         
@@ -45,12 +47,16 @@ public:
     {
         readerSource->getNextAudioBlock(bufferToFill);
         
+        
         for (int i = 0; i < 16; i++)
         {
             if (playhead->getPositionInSamples() + bufferToFill.buffer->getNumSamples() > playhead->beatsToSamples(i * 4) && playhead->getPositionInSamples() <= playhead->beatsToSamples(i * 4))
                 readerSource->setNextReadPosition(0);
         }
     }
+    
+    void setEnabled(bool enabled) {isEnabled = enabled;}
+    bool getEnabled() {return isEnabled;}
     
     Playhead* playhead;
     
@@ -59,4 +65,6 @@ private:
     std::unique_ptr<AudioFormatReaderSource> readerSource;
     AudioFormatManager formatManager;
     AudioTransportSource transportSource;
+    
+    bool isEnabled = true;
 };

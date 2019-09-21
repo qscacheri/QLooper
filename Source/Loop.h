@@ -16,6 +16,11 @@ class Loop
 {
 public:
     
+    Loop() : audioData()
+    {
+        
+    }
+    
     void doubleLoop();
     
     AudioBuffer<float> audioData;

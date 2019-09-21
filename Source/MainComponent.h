@@ -21,7 +21,7 @@
     This component lives inside our window, and this is where you should put all
     your controls and content.
 */
-class MainComponent   : public AudioAppComponent, public MenuBarModel::Listener
+class MainComponent   : public AudioAppComponent, public MenuBarModel::Listener, public Slider::Listener
 {
 public:
     //==============================================================================
@@ -40,6 +40,9 @@ public:
     virtual void menuBarItemsChanged (MenuBarModel *menuBarModel) override;
     virtual void menuCommandInvoked (MenuBarModel *menuBarModel, const ApplicationCommandTarget::InvocationInfo &info) override;
     virtual void menuBarActivated (MenuBarModel *menuBarModel, bool isActive) override;
+    
+    //Slider Listener
+    virtual void sliderValueChanged(Slider *slider) override;
 
 private:
     
@@ -55,7 +58,7 @@ private:
             setUsingNativeTitleBar (true);
             setContentOwned (new AudioPreferencesComponent(manager), true);
             setResizable (true, true);
-            setVisible (true);
+            setVisible (false);
             
         }
         
@@ -94,12 +97,16 @@ private:
     std::unique_ptr<TwoPartSVGKnob> knob;
     std::unique_ptr<ImageButton> playButton;
     std::unique_ptr<ImageButton> recordButton;
+    std::unique_ptr<ImageButton> clearButton;
 
+    std::unique_ptr<TextButton> inputMonitoringButton;
+    std::unique_ptr<TextButton> metroButton;
+    std::unique_ptr<Slider> tempoSlider;
     std::unique_ptr<TextButton> ioButton;
-    Playhead playhead;
+    
+    Image backgroundImage;
     Looper looper;
     ToneGeneratorAudioSource tone;
-    Metronome metronome;
     
     //components
     

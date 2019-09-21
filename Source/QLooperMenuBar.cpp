@@ -33,11 +33,16 @@ PopupMenu QLooperMenuBarModel::getMenuForIndex (int topLevelMenuIndex, const Str
         menu.addItem(PopupMenu::Item("Audio Setup"));
         return menu;
     }
+    return PopupMenu();
 }
 
 void QLooperMenuBarModel::menuItemSelected (int menuItemID, int topLevelMenuIndex)
 {
-    owner->audioWindow->setVisible(true);
+    if (menuItemID == ids::AudioPreferencesId)
+    {
+        owner->audioWindow->setVisible(true);
+        owner->audioWindow->toFront(true);
+    }
 }
 
 void QLooperMenuBarModel::menuBarActivated (bool isActive)

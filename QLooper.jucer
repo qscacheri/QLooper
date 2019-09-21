@@ -7,6 +7,7 @@
     <FILE id="GWxOpW" name="button_up.png" compile="0" resource="1" file="button_up.png"/>
     <FILE id="x3qBlg" name="knob_base.png" compile="0" resource="1" file="knob_base.png"/>
     <FILE id="l0zsK2" name="tick.png" compile="0" resource="1" file="tick.png"/>
+    <FILE id="rZatCt" name="background.png" compile="0" resource="1" file="background.png"/>
     <GROUP id="{F175EB77-DF78-83AB-7BE1-8FC0DC47B002}" name="Source">
       <FILE id="DR5OTD" name="QLooperLookAndFeel.h" compile="0" resource="0"
             file="Source/QLooperLookAndFeel.h"/>
