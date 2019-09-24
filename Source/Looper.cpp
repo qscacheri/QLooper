@@ -13,16 +13,18 @@
 Looper::Looper() : playhead(), metronome(&playhead)
 {
     playhead.setLength(playhead.beatsToSamples(4 * 16));
-    loops.push_back(std::make_unique<Loop>());
-    loops[0]->audioData.setSize(1, playhead.getLength());
-    loops[0]->audioData.clear();
+    for (int i = 0; i < 3; i++)
+    {
+        loops[i].reset(new Loop());
+        loops[i]->audioData.setSize(1, playhead.getLength());
+        loops[i]->audioData.clear();
+    }
 }
 
 void Looper::prepareToPlay(int samplesExpected, double sampleRate)
 {
     lastSampleRate = sampleRate;
     metronome.prepareToPlay(samplesExpected, sampleRate);
-
 }
 
 void Looper::getNextAudioBlock(AudioBuffer<float> &buffer)
@@ -48,23 +50,12 @@ void Looper::getNextAudioBlock(AudioBuffer<float> &buffer)
     if (!inputMonitoringEnabled) {
         buffer.clear();
     }
-    if (playhead.getPositionInSamples() + numSamples >= playhead.getLength())
-    {
-        int diff = playhead.getLength() - playhead.getPositionInSamples();
-        buffer.addFrom(0, 0, loops[0]->audioData, 0, playhead.getPositionInSamples(), diff);
-        buffer.addFrom(0, diff, loops[0]->audioData, 0, 0, numSamples - diff);
-        
-        buffer.addFrom(1, 0, loops[0]->audioData, 0, playhead.getPositionInSamples(), diff);
-        buffer.addFrom(1, diff, loops[0]->audioData, 0, 0, numSamples - diff);
-
-    }
     
-    else
+    for (int i = 0; i < 3; i++)
     {
-        buffer.addFrom(0, 0, loops[0]->audioData, 0, playhead.getPositionInSamples(), numSamples);
-        buffer.addFrom(1, 0, loops[0]->audioData, 0, playhead.getPositionInSamples(), numSamples);
-
+        loops[i]->getNextAudioBlock(buffer, playhead);
     }
+
     
     if (getMetronomeEnabled()) {
         metronome.getNextBlock(AudioSourceChannelInfo(buffer));
@@ -73,7 +64,7 @@ void Looper::getNextAudioBlock(AudioBuffer<float> &buffer)
 
 }
 
-void Looper::startRecording(bool createNewLoop)
+void Looper::startRecording(int which)
 {
     recordBuffer.setSize(1, playhead.getLength());
     recordBuffer.clear();
@@ -82,7 +73,7 @@ void Looper::startRecording(bool createNewLoop)
     DBG("STARTED RECORDING");
 }
 
-void Looper::stopRecording()
+void Looper::stopRecording(int which)
 {
     File file("~/Desktop/out.wav");
     std::unique_ptr<FileOutputStream> outputStream(file.createOutputStream());
@@ -103,9 +94,18 @@ void Looper::stopRecording()
     
     DBG("STOPPED RECORDING");
     
-    loops[0]->audioData.addFrom(0, 0, recordBuffer, 0, 0, playhead.getLength());
+    loops[which]->audioData.addFrom(0, 0, recordBuffer, 0, 0, playhead.getLength());
     
 }
+
+void Looper::toggleRecording(int which)
+{
+    if (isRecording)
+        stopRecording(which);
+    else
+        startRecording(which);
+}
+
 
 void Looper::setMetronomeEnabled(bool metronomeEnabled)
 {
@@ -119,7 +119,9 @@ bool Looper::getMetronomeEnabled()
 void Looper::setTempo(int bpm)
 {
     playhead.setTempo(bpm);
-    loops[0]->audioData.setSize(1, playhead.getLength());
+    for (int i = 0; i < 3; i++){
+        loops[i]->audioData.setSize(1, playhead.getLength());
+    }
 }
 
 int Looper::getTempo()
@@ -127,10 +129,36 @@ int Looper::getTempo()
     return playhead.getTempo();
 }
 
-void Looper::clearLoop()
+void Looper::clearLoop(int which)
 {
     if (isRecording)
-        stopRecording();
+        stopRecording(which);
     
-    loops[0]->audioData.clear();
+    loops[which]->audioData.clear();
 }
+
+void Looper::setLoopGain(int which, float newGain)
+{
+    loops[which]->setGain(newGain);
+}
+
+float Looper::getLoopLevel(int which)
+{
+    return loops[which]->getLevel();
+}
+
+void Looper::setTempoLockEnabled(bool enabled)
+{
+    tempoLockEnabled = enabled;
+}
+
+bool Looper::getTempoLockEnabled()
+{
+    return tempoLockEnabled;
+}
+
+void Looper::toggleTempoLock()
+{
+    setTempoLockEnabled(!tempoLockEnabled);
+}
+

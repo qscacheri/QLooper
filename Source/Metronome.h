@@ -56,8 +56,9 @@ public:
                 AudioBuffer<float> bufferCopy(1, numSamples - position);
                 readerSource->getNextAudioBlock(AudioSourceChannelInfo(bufferCopy));
                 bufferCopy.applyGain(0, 0, numSamples - position, gain);
-                bufferToFill.buffer->addFrom(0, position, bufferCopy, 0, 0, numSamples - position);
-                bufferToFill.buffer->addFrom(1, position, bufferCopy, 0, 0, numSamples - position);
+                
+                for (int i = 0; i < bufferToFill.buffer->getNumChannels(); i++)
+                    bufferToFill.buffer->addFrom(i, position, bufferCopy, 0, 0, numSamples - position);
                 
                 startedPlayback = true;
                 break;
@@ -71,9 +72,9 @@ public:
             AudioBuffer<float> bufferCopy(1, numSamples);
             readerSource->getNextAudioBlock(AudioSourceChannelInfo(bufferCopy));
             bufferCopy.applyGain(0, 0, numSamples, gain);
-            bufferToFill.buffer->addFrom(0, 0, bufferCopy, 0, 0, numSamples);
-            bufferToFill.buffer->addFrom(1, 0, bufferCopy, 0, 0, numSamples);
-
+            
+            for (int i = 0; i < bufferToFill.buffer->getNumChannels(); i++)
+                bufferToFill.buffer->addFrom(i, 0, bufferCopy, 0, 0, numSamples);
         }
 
     }

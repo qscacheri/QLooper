@@ -18,12 +18,19 @@
 #include "ImageToggleButton.h"
 #include "LevelMeter.h"
 #include <array>
+
+
 //==============================================================================
 /*
     This component lives inside our window, and this is where you should put all
     your controls and content.
 */
-class MainComponent   : public AudioAppComponent, public MenuBarModel::Listener, public Slider::Listener, public ApplicationCommandTarget
+class MainComponent   : public AudioAppComponent,
+                        public MenuBarModel::Listener,
+                        public Slider::Listener,
+                        public ApplicationCommandTarget,
+                        public Button::Listener,
+                        public MidiInputCallback
 {
 public:
     //==============================================================================
@@ -48,13 +55,21 @@ public:
     
     //Slider Listener
     virtual void sliderValueChanged(Slider *slider) override;
-
-    // command target
-    virtual ApplicationCommandTarget* getNextCommandTarget();
-    virtual void getAllCommands (Array< CommandID > &commands);
-    virtual void getCommandInfo (CommandID commandID, ApplicationCommandInfo &result);
-    virtual bool perform (const InvocationInfo &info);
     
+    // button listener
+    virtual void buttonClicked(Button*) override;
+    virtual void buttonStateChanged(Button*) override;
+
+    
+    // command target
+    virtual ApplicationCommandTarget* getNextCommandTarget() override;
+    virtual void getAllCommands (Array< CommandID > &commands) override;
+    virtual void getCommandInfo (CommandID commandID, ApplicationCommandInfo &result) override;
+    virtual bool perform (const InvocationInfo &info) override;
+    
+    // midicallback functions
+    virtual void handleIncomingMidiMessage (MidiInput *source, const MidiMessage &message) override;
+    virtual void handlePartialSysexMessage (MidiInput *source, const uint8 *messageData, int numBytesSoFar, double timestamp);
     
 private:
     
@@ -106,6 +121,9 @@ public:
 
     std::unique_ptr<AudioWindow> audioWindow;
 private:
+    
+    ValueTree applicationData;
+    
     std::unique_ptr<QLooperMenuBarModel> model;
     
     std::unique_ptr<Slider> inputLevelSlider;
@@ -119,14 +137,22 @@ private:
     std::unique_ptr<ImageToggleButton> recordButton;
     std::unique_ptr<ImageButton> clearButton;
 
-    std::unique_ptr<TextButton> inputMonitoringButton;
+    std::unique_ptr<ImageToggleButton> inputMonitoringButton;
     std::unique_ptr<ImageButton> metroButton;
+    std::unique_ptr<ImageButton> tempoLockButton;
     std::unique_ptr<Slider> tempoSlider;
     std::unique_ptr<TextButton> ioButton;
     
     std::array<std::unique_ptr<LevelMeter>, 3> meters;
     std::array<std::unique_ptr<ImageToggleButton>, 3> recordButtons;
+    std::array<std::unique_ptr<ImageButton>, 3> playButtons;
+
     std::array<std::unique_ptr<ImageButton>, 3> clearButtons;
+    
+    std::array<std::unique_ptr<TwoPartSVGKnob>, 3> loopGainKnobs;
+
+
+    
     Image backgroundImage;
     Image divider;
     

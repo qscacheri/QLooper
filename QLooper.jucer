@@ -38,20 +38,30 @@
     </GROUP>
     <GROUP id="{AA62E192-80AF-14DC-CC2D-33676201AA6E}" name="assets">
       <GROUP id="{44C5EACE-7F23-298A-5697-2C6B3859C459}" name="graphics">
-        <FILE id="RfVmIy" name="background.png" compile="0" resource="1" file="assets/graphics/background.png"/>
-        <FILE id="FdmO8y" name="button_off_down.png" compile="0" resource="1"
+        <FILE id="Ka6huB" name="background.png" compile="0" resource="1" file="assets/graphics/background.png"/>
+        <FILE id="jorkU4" name="button_off_down.png" compile="0" resource="1"
               file="assets/graphics/button_off_down.png"/>
-        <FILE id="dAOhyb" name="button_off_up.png" compile="0" resource="1"
+        <FILE id="DGnzpU" name="button_off_up.png" compile="0" resource="1"
               file="assets/graphics/button_off_up.png"/>
-        <FILE id="Fmnian" name="button_on_down.png" compile="0" resource="1"
+        <FILE id="rC5SbT" name="button_on_down.png" compile="0" resource="1"
               file="assets/graphics/button_on_down.png"/>
-        <FILE id="giIJq2" name="button_on_up.png" compile="0" resource="1"
+        <FILE id="lX97Z1" name="button_on_up.png" compile="0" resource="1"
               file="assets/graphics/button_on_up.png"/>
-        <FILE id="fjVYxX" name="divider.png" compile="0" resource="1" file="assets/graphics/divider.png"/>
-        <FILE id="KWf8cG" name="knob_base.png" compile="0" resource="1" file="assets/graphics/knob_base.png"/>
-        <FILE id="P67G9i" name="metronome_button.png" compile="0" resource="1"
-              file="assets/graphics/metronome_button.png"/>
-        <FILE id="XdPj3B" name="tick.png" compile="0" resource="1" file="assets/graphics/tick.png"/>
+        <FILE id="dXfzCY" name="divider.png" compile="0" resource="1" file="assets/graphics/divider.png"/>
+        <FILE id="OSKIWV" name="input_button_off_down.png" compile="0" resource="1"
+              file="assets/graphics/input_button_off_down.png"/>
+        <FILE id="ceDzLz" name="input_button_off_up.png" compile="0" resource="1"
+              file="assets/graphics/input_button_off_up.png"/>
+        <FILE id="ucNuNE" name="input_button_on_down.png" compile="0" resource="1"
+              file="assets/graphics/input_button_on_down.png"/>
+        <FILE id="kJUSvo" name="input_button_on_up.png" compile="0" resource="1"
+              file="assets/graphics/input_button_on_up.png"/>
+        <FILE id="HPqVpa" name="knob_base.png" compile="0" resource="1" file="assets/graphics/knob_base.png"/>
+        <FILE id="S4cY8y" name="metro_button_down.png" compile="0" resource="1"
+              file="assets/graphics/metro_button_down.png"/>
+        <FILE id="oAXDO8" name="metro_button_up.png" compile="0" resource="1"
+              file="assets/graphics/metro_button_up.png"/>
+        <FILE id="HlbQks" name="tick.png" compile="0" resource="1" file="assets/graphics/tick.png"/>
       </GROUP>
       <GROUP id="{BD0F7AEC-FF28-CD31-D397-90C6109C891A}" name="samples">
         <FILE id="gjD3kG" name="click.wav" compile="0" resource="1" file="assets/samples/click.wav"/>

@@ -20,8 +20,8 @@ LevelMeter::LevelMeter(std::function<float()> updateFunc)
     setColour(outlineColourId, Colours::black);
     
     updateLevel = updateFunc;
-    
-    startTimerHz(5);
+    setOpaque(true);
+    startTimerHz(30);
 }
 
 LevelMeter::~LevelMeter()
@@ -61,8 +61,8 @@ void LevelMeter::paint (Graphics& g)
     
     if (isVertical)
     {
-        float levelHeight = qtils::map(currentLevel, 0.f, 1.f, 0, getHeight());
-        g.fillRect(border, getHeight() - levelHeight, getWidth() - border, levelHeight);
+//        float levelHeight = qtils::map(currentLevel, 0.f, 1.f, 0, getHeight());
+//        g.fillRect(border, getHeight() - levelHeight, getWidth() - border, levelHeight);
 
     }
     else
