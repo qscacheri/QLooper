@@ -12,7 +12,7 @@
 #include "MainComponent.h"
 #include "QLooperMenuBar.h"
 //==============================================================================
-class LooperApplication  : public JUCEApplication, public MenuBarModel::Listener
+class LooperApplication  : public JUCEApplication
 {
 public:
     //==============================================================================
@@ -29,16 +29,37 @@ public:
 
         mainWindow.reset (new MainWindow (getApplicationName()));
         
-        menuBarComponent.reset(new MenuBarComponent(model.get()));
-                
-//        commandManager.registerCommand(ApplicationCommandInfo(50));
-//        commandManager.registerAllCommandsForTarget(audioWindow.get());
+        
+
+        ApplicationCommandInfo info(50);
+        info.setInfo("Preferences", "Preferences", "Utility", 0);
+        commandManager.registerCommand(info);
+        MainComponent* target = static_cast<MainComponent*>(mainWindow->getContentComponent());
+        target->keyMapper.reset(new KeyMappingEditorComponent(*commandManager.getKeyMappings(), true));
+        
+        commandManager.registerAllCommandsForTarget(target);
+        commandManager.getKeyMappings()->resetToDefaultMappings();
+        commandManager.getKeyMappings()->addKeyPress(QLooperMenuBarModel::ids::AudioPreferencesId, KeyPress(44, ModifierKeys::commandModifier, ','));
+        target->addKeyListener (commandManager.getKeyMappings());
+
+        model.reset(new QLooperMenuBarModel(&commandManager));
+        PopupMenu appleMenu;
+        appleMenu.addCommandItem(&commandManager, QLooperMenuBarModel::ids::AudioPreferencesId, "Preferences");
+        MenuBarModel::setMacMainMenu(model.get(), &appleMenu);
+        model->setApplicationCommandManagerToWatch(&commandManager);
+        commandManager.setFirstCommandTarget(target);
+        commandManager.invokeDirectly(QLooperMenuBarModel::ids::AudioPreferencesId, true);
+        
+        
+        
+        
+        
+        
     }
 
     void shutdown() override
     {
-        // Add your application's shutdown code here..
-
+        
         mainWindow = nullptr; // (deletes our window)
     }
 
@@ -62,22 +83,6 @@ public:
         This class implements the desktop window that contains an instance of
         our MainComponent class.
     */
-    
-    virtual void menuBarItemsChanged (MenuBarModel *menuBarModel) override
-    {
-        
-    }
-    
-    
-    virtual void menuCommandInvoked (MenuBarModel *menuBarModel, const ApplicationCommandTarget::InvocationInfo &info) override
-    {
-        
-    }
-    
-    virtual void menuBarActivated (MenuBarModel *menuBarModel, bool isActive) override
-    {
-        
-    }
     
     class MainWindow : public DocumentWindow
     {
@@ -124,9 +129,8 @@ public:
 
 private:
     std::unique_ptr<MainWindow> mainWindow;
-
-    std::unique_ptr<MenuBarComponent> menuBarComponent;
     std::unique_ptr<QLooperMenuBarModel> model;
+
 };
 
 //==============================================================================

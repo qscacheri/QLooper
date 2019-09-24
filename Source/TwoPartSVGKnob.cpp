@@ -10,10 +10,12 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "TwoPartSVGKnob.h"
-
+#include "quinUtils.h"
 //==============================================================================
 TwoPartSVGKnob::TwoPartSVGKnob(Image base, Image tick) : baseImage(base), tickImage(tick)
 {
+    setSliderStyle(SliderStyle::RotaryVerticalDrag);
+    setTextBoxStyle(NoTextBox, true, 0, 0);
     
 }
 
@@ -24,10 +26,12 @@ TwoPartSVGKnob::~TwoPartSVGKnob()
 
 void TwoPartSVGKnob::paint(Graphics &g)
 {
-    g.drawRect(getLocalBounds(), 5.f);
+    
     g.drawImageWithin(baseImage, 0, 0, getWidth(), getHeight(), RectanglePlacement::centred);
-    g.addTransform(AffineTransform::rotation(float_Pi / 2, getWidth() / 2, getHeight() / 2));
-    g.drawImageWithin(tickImage, 0, 0, getWidth(), getHeight(), RectanglePlacement::centred);
-    Rectangle<int> rect(0, 0, tickImage.getWidth(), tickImage.getHeight());
-    g.drawRect(rect, 2.f);
+    
+    float angle = qtils::map(getValue(), getMinimum(), getMaximum(), -2.42, 2.42);
+    
+    g.addTransform(AffineTransform::rotation(angle, getWidth() / 2, getHeight() / 2));
+    g.drawImageWithin(tickImage, 0, 0, getWidth(), getHeight(), RectanglePlacement::stretchToFit);
+    
 }

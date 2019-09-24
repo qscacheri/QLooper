@@ -55,7 +55,9 @@ public:
 
         }
         
-        g.drawImageWithin(imageToDraw, 0, 0, getWidth(), getHeight(), RectanglePlacement::centred, false);
+        g.drawImageWithin(imageToDraw, 0, 0, getWidth(), getHeight(), RectanglePlacement::stretchToFit, false);
+        
+//        g.drawRect(getLocalBounds(), 1.f);
     }
     
     void setImages(Image normalUp, Image normalDown, Image onUp, Image onDown)

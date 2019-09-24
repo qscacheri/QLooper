@@ -4,6 +4,10 @@
               companyName="Quin Scacheri" bundleIdentifier="com.scacheri.qlooper">
   <MAINGROUP id="lE4X5v" name="QLooper">
     <GROUP id="{F175EB77-DF78-83AB-7BE1-8FC0DC47B002}" name="Source">
+      <FILE id="tYOprs" name="quinUtils.cpp" compile="1" resource="0" file="Source/quinUtils.cpp"/>
+      <FILE id="QuMTuz" name="quinUtils.h" compile="0" resource="0" file="Source/quinUtils.h"/>
+      <FILE id="f9GORo" name="LevelMeter.cpp" compile="1" resource="0" file="Source/LevelMeter.cpp"/>
+      <FILE id="ccuj7L" name="LevelMeter.h" compile="0" resource="0" file="Source/LevelMeter.h"/>
       <FILE id="DR5OTD" name="QLooperLookAndFeel.h" compile="0" resource="0"
             file="Source/QLooperLookAndFeel.h"/>
       <FILE id="IJLKp8" name="ImageToggleButton.h" compile="0" resource="0"
@@ -43,8 +47,11 @@
               file="assets/graphics/button_on_down.png"/>
         <FILE id="giIJq2" name="button_on_up.png" compile="0" resource="1"
               file="assets/graphics/button_on_up.png"/>
+        <FILE id="fjVYxX" name="divider.png" compile="0" resource="1" file="assets/graphics/divider.png"/>
         <FILE id="KWf8cG" name="knob_base.png" compile="0" resource="1" file="assets/graphics/knob_base.png"/>
-        <FILE id="z6tjWO" name="tick.png" compile="0" resource="1" file="assets/graphics/tick.png"/>
+        <FILE id="P67G9i" name="metronome_button.png" compile="0" resource="1"
+              file="assets/graphics/metronome_button.png"/>
+        <FILE id="XdPj3B" name="tick.png" compile="0" resource="1" file="assets/graphics/tick.png"/>
       </GROUP>
       <GROUP id="{BD0F7AEC-FF28-CD31-D397-90C6109C891A}" name="samples">
         <FILE id="gjD3kG" name="click.wav" compile="0" resource="1" file="assets/samples/click.wav"/>

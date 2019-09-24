@@ -37,7 +37,6 @@ public:
     
     void prepareToPlay (int samplesPerBlockExpected, double sampleRate)
     {
-        
         transportSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
         readerSource->prepareToPlay(samplesPerBlockExpected, sampleRate);
         readerSource->setLooping(false);

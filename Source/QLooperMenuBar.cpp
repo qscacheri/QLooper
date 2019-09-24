@@ -11,9 +11,9 @@
 #include "QLooperMenuBar.h"
 #include "MainComponent.h"
 
-QLooperMenuBarModel::QLooperMenuBarModel(MainComponent* mc)
+QLooperMenuBarModel::QLooperMenuBarModel(ApplicationCommandManager* manager)
 {
-    owner = mc;
+    commandManager = manager;
 }
 
 StringArray QLooperMenuBarModel::getMenuBarNames()
@@ -27,7 +27,8 @@ StringArray QLooperMenuBarModel::getMenuBarNames()
 PopupMenu QLooperMenuBarModel::getMenuForIndex (int topLevelMenuIndex, const String &menuName)
 {
     PopupMenu menu;
-    
+    menu.addCommandItem(commandManager, 10, "slkdfjs");
+
     if (menuName.equalsIgnoreCase("Preferences"))
     {
         menu.addItem(PopupMenu::Item("Audio Setup"));
@@ -40,8 +41,8 @@ void QLooperMenuBarModel::menuItemSelected (int menuItemID, int topLevelMenuInde
 {
     if (menuItemID == ids::AudioPreferencesId)
     {
-        owner->audioWindow->setVisible(true);
-        owner->audioWindow->toFront(true);
+//        owner->audioWindow->setVisible(true);
+//        owner->audioWindow->toFront(true);
     }
 }
 

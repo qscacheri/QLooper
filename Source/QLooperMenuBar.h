@@ -22,7 +22,7 @@ public:
         AudioPreferencesId = 1
     };
     
-    QLooperMenuBarModel (MainComponent* mainComponent);
+    QLooperMenuBarModel (ApplicationCommandManager* manager);
     
     virtual StringArray getMenuBarNames() override;
     
@@ -32,5 +32,6 @@ public:
     
     virtual void menuBarActivated (bool isActive) override;
     
-    MainComponent* owner;
+    
+    ApplicationCommandManager* commandManager;
 };

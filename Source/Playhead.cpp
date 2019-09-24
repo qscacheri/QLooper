@@ -47,7 +47,7 @@ void Playhead::setLength(int numSamples)
 
 int Playhead::beatsToSamples(int sixteenthNotes)
 {
-    int samples = ((int)((60.0 / bpm*lastSampleRate) / 4 * sixteenthNotes));
+    int samples = ((int)((60.0 / bpm * lastSampleRate) / 4 * sixteenthNotes));
     return samples;
 }
 
